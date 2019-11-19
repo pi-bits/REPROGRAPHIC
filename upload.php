@@ -90,7 +90,60 @@ function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$ema
    $priority = $urgentlyRequired == 'Yes' ? 1 : 3;
 
    $specialRequirement = $_POST["specialRequirement"];
-   $emailSender->sendEmail($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $filesToEmail, $priority);
+   $body = buildEmailBody($firstName,$department,$printCopies,$dateRequired,$period,$urgentlyRequired,$printType,$specialRequirement);
+   $subject='Reprographic Requirement for : ' . $firstName;
+   $emailSender->sendEmail($subject, $body, $filesToEmail, $priority);
+}
+
+function buildEmailBody($firstName,$department,$printCopies,$dateRequired,$period,$urgentlyRequired,$printType,$specialRequirement){
+   return '<html>
+               <head>
+               <style>
+                           th, td {
+                 padding: 5px;
+                 text-align: left;
+               }
+               </style>
+               </head>
+               <body>
+                           <table style="width:100%" border="1">
+                   <tr>
+                     <th>Name</th>
+                     <td>' . $firstName . '</td>
+                   </tr>
+                   <tr>
+                     <th>Department</th>
+                     <td>' . $department . '</td>
+                   </tr>
+                   <tr>
+                   <th>Number of Copies</th>
+                   <td>' . $printCopies . '</td>
+                   </tr>
+                   <tr>
+                     <th>Date Required</th>
+                     <td>' . $dateRequired . '</td>
+                   </tr>
+                   <tr>
+                     <th>Period</th>
+                     <td>' . $period . '</td>
+                   </tr>
+                   <tr>
+                     <th>Urgently required</th>
+                     <td>' . $urgentlyRequired . '</td>
+                   </tr>
+                   <tr>
+                     <th>Print Requirements</th>
+                     <td>' . $printType . '</td>
+                   </tr>
+                   <tr>
+                     <th>Special Requirements (if any)</th>
+                     <td>' . $specialRequirement . '</td>
+                   </tr>
+                 </table>
+                 <br/>
+                 </body>
+                           </html>';
+                           
 }
 function hasErrors()
 {

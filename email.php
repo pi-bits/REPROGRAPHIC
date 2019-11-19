@@ -30,69 +30,23 @@ class EmailSender
     }
 
 
-    function sendEmail($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $filesToEmail,$priority)
+    function sendEmail($subject,$body,$filesToEmail,$priority)
     {
         try {
 
 
             $this->mail->Priority = $priority;
-            $this->mail->Subject = 'Reprographic Requirement for : ' . $firstName;
+            $this->mail->Subject = $subject;
             foreach ($filesToEmail as $file_name => $file_to_attach) {
                 $this->mail->AddAttachment($file_to_attach, $file_name);
             }
-            $this->mail->Body  = '<html>
-               <head>
-               <style>
-                           th, td {
-                 padding: 5px;
-                 text-align: left;
-               }
-               </style>
-               </head>
-               <body>
-                           <table style="width:100%" border="1">
-                   <tr>
-                     <th>Name</th>
-                     <td>' . $firstName . '</td>
-                   </tr>
-                   <tr>
-                     <th>Department</th>
-                     <td>' . $department . '</td>
-                   </tr>
-                   <tr>
-                   <th>Number of Copies</th>
-                   <td>' . $printCopies . '</td>
-                   </tr>
-                   <tr>
-                     <th>Date Required</th>
-                     <td>' . $dateRequired . '</td>
-                   </tr>
-                   <tr>
-                     <th>Period</th>
-                     <td>' . $period . '</td>
-                   </tr>
-                   <tr>
-                     <th>Urgently required</th>
-                     <td>' . $urgentlyRequired . '</td>
-                   </tr>
-                   <tr>
-                     <th>Print Requirements</th>
-                     <td>' . $printType . '</td>
-                   </tr>
-                   <tr>
-                     <th>Special Requirements (if any)</th>
-                     <td>' . $specialRequirement . '</td>
-                   </tr>
-                 </table>
-                 <br/>
-                 </body>
-                           </html>';
+            $this->mail->Body  = $body;
             $this->mail->send();
             echo 'Message has been sent';
             $_POST = array();
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-            error_log("Message could not be sent. Mailer Error: ", $mail->ErrorInfo . $e);
+            echo "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}";
+            error_log("Message could not be sent. Mailer Error: ", $this->mail->ErrorInfo . $e);
         }
     }
 }

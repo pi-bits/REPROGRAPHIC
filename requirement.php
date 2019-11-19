@@ -18,7 +18,6 @@ include 'upload.php';
     <script>
         $(document).ready(function() {
             $(':input').change(function() {
-                console.log('change triggered'+ $(this).closest('div').find('span').text());
                 $(this).closest('div').find('span').hide();
             });
         });
