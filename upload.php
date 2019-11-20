@@ -4,7 +4,6 @@ include 'email.php';
 require './includes/constants.php';
 require './includes/referenceDataConfig.php';
 
-$uploadOk = 0;
 $emailSender  = new EmailSender();
 $filesToEmail = array();
 
@@ -143,7 +142,7 @@ function buildEmailBody($firstName,$department,$printCopies,$dateRequired,$perio
                  <br/>
                  </body>
                            </html>';
-                           
+
 }
 function hasErrors()
 {
