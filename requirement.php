@@ -59,6 +59,12 @@ include 'upload.php';
                                 <?php if (isset($_SESSION['errors']['firstnameError'])) echo ' <span for="firstname" class="errorText">' . $_SESSION['errors']['firstnameError'] . '</span>'; ?>
                             </div>
 
+                            <div class="col-md-2"></div>
+                            <div class="col-md-9 mt-3">
+                                <label for="fromEmail" class="control-label">Enter your email:</label>
+                                <input type="text" class="form-control form-control-sm" id="fromEmail" placeholder="Enter Your email" name="fromEmail" value="<?php echo isset($_POST["fromEmail"]) ? $_POST["fromEmail"] : ''; ?>">
+                                <?php if (isset($_SESSION['errors']['fromEmailError'])) echo ' <span for="fromEmail" class="errorText">' . $_SESSION['errors']['fromEmailError'] . '</span>'; ?>
+                            </div>
                         </div>
 
                         <div class="form-group required row">

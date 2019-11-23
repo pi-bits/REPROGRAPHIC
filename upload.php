@@ -78,6 +78,7 @@ function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$ema
    }
 
    $firstName =  $_POST["firstname"];
+   $fromEmail =  $_POST["fromEmail"];
    $department = $DEPARTMENT_CONFIG[$_POST["department"]];
    $printCopies =  $_POST["printCopies"];
    $dateRequired  = date("d-M-Y", strtotime($_POST["Dates"]));
@@ -89,12 +90,13 @@ function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$ema
    $priority = $urgentlyRequired == 'Yes' ? 1 : 3;
 
    $specialRequirement = $_POST["specialRequirement"];
-   $body = buildEmailBody($firstName,$department,$printCopies,$dateRequired,$period,$urgentlyRequired,$printType,$specialRequirement);
-   $subject='Reprographic Requirement for : ' . $firstName;
-   $emailSender->sendEmail($subject, $body, $filesToEmail, $priority);
+   $body = buildEmailBody($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $fromEmail);
+   $subject = 'Reprographic Requirement for : ' . $firstName;
+   $emailSender->sendEmail($subject, $body, $filesToEmail, $priority,$fromEmail);
 }
 
-function buildEmailBody($firstName,$department,$printCopies,$dateRequired,$period,$urgentlyRequired,$printType,$specialRequirement){
+function buildEmailBody($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $fromEmail)
+{
    return '<html>
                <head>
                <style>
@@ -110,6 +112,10 @@ function buildEmailBody($firstName,$department,$printCopies,$dateRequired,$perio
                      <th>Name</th>
                      <td>' . $firstName . '</td>
                    </tr>
+                   <tr>
+                   <th>Email</th>
+                   <td>' . $fromEmail . '</td>
+                 </tr>
                    <tr>
                      <th>Department</th>
                      <td>' . $department . '</td>
@@ -142,12 +148,22 @@ function buildEmailBody($firstName,$department,$printCopies,$dateRequired,$perio
                  <br/>
                  </body>
                            </html>';
-
 }
 function hasErrors()
 {
    $maxNumberOfFiles = 10;
    $errors = array();
+
+
+   if (empty($_POST['fromEmail'])) {
+      $errors['fromEmailError'] = "Email address is required.";
+   } else {
+      $fromEmail = test_input($_POST["fromEmail"]);
+      if (!emailValidation($fromEmail)) {
+         $errors['fromEmailError'] = "Enter a valid email address.";
+      }
+   }
+
 
    if (empty($_POST['firstname'])) {
       $errors['firstnameError'] = "Name is required.";
@@ -183,9 +199,6 @@ function hasErrors()
       $errors['periodError'] = "Period is required.";
    }
 
-   // if (empty($_FILES['uploadDocument']['name'][0])) {
-   //    $errors['uploadDocumentError'] = "Upload your document to print.";
-   // }
    if (!empty($_FILES['uploadDocument']['name'][0] && count($_FILES['uploadDocument']['name']) > $maxNumberOfFiles)) {
       $errors['uploadDocumentError'] = "Cannot upload more than {$maxNumberOfFiles} files at one time. Please try again.";
    }
@@ -209,4 +222,10 @@ function test_input($data)
    $data = stripslashes($data);
    $data = htmlspecialchars($data);
    return $data;
+}
+function emailValidation($email)
+{
+   $regex = "/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,10})$/";
+   $email = strtolower($email);
+   return preg_match($regex, $email);
 }

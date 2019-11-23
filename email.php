@@ -3,10 +3,11 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require './phpmailer/src/Exception.php';
+
 require './phpmailer/src/PHPMailer.php';
 require './phpmailer/src/SMTP.php';
 require './includes/constants.php';
+require './phpmailer/src/Exception.php';
 
 class EmailSender
 {
@@ -24,17 +25,16 @@ class EmailSender
         $this->mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
         $this->mail->Port       = 587;                                    // TCP port to connect to
         $this->mail->addAddress(TO_EMAIL, TO_NAME);                       // Add a recipient
-        $this->mail->setFrom(FROM_EMAIL, 'donotreply@thehazeleyacademy.com');
         $this->mail->isHTML(true);                                        // Set email format to HTML
 
     }
 
 
-    function sendEmail($subject,$body,$filesToEmail,$priority)
+    function sendEmail($subject, $body, $filesToEmail, $priority, $fromEmail)
     {
         try {
 
-
+            $this->mail->setFrom(FROM_EMAIL, $fromEmail);
             $this->mail->Priority = $priority;
             $this->mail->Subject = $subject;
             foreach ($filesToEmail as $file_name => $file_to_attach) {
