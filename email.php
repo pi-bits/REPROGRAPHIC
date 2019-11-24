@@ -24,7 +24,7 @@ class EmailSender
         $this->mail->Password   = PASSWORD;                               // SMTP password
         $this->mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
         $this->mail->Port       = 587;                                    // TCP port to connect to
-        $this->mail->addAddress(USER_NAME, TO_NAME);                       // Add a recipient
+        $this->mail->addAddress(USER_NAME, NAME);                       // Add a recipient
         $this->mail->isHTML(true);                                        // Set email format to HTML
 
     }
@@ -35,7 +35,7 @@ class EmailSender
         try {
 
             $this->mail->addReplyTo($fromEmail);
-            $this->mail->setFrom(USER_NAME,TO_NAME,false);
+            $this->mail->setFrom(USER_NAME,NAME,false);
             $this->mail->Priority = $priority;
             $this->mail->Subject = $subject;
             $this->mail->AddCC($fromEmail);
