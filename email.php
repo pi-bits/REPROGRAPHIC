@@ -24,7 +24,7 @@ class EmailSender
         $this->mail->Password   = PASSWORD;                               // SMTP password
         $this->mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
         $this->mail->Port       = 587;                                    // TCP port to connect to
-        $this->mail->addAddress(TO_EMAIL, TO_NAME);                       // Add a recipient
+        $this->mail->addAddress(USER_NAME, TO_NAME);                       // Add a recipient
         $this->mail->isHTML(true);                                        // Set email format to HTML
 
     }
@@ -33,10 +33,12 @@ class EmailSender
     function sendEmail($subject, $body, $filesToEmail, $priority, $fromEmail)
     {
         try {
+
             $this->mail->addReplyTo($fromEmail);
-            $this->mail->setFrom($fromEmail,FROM_NAME,false);
+            $this->mail->setFrom(USER_NAME,TO_NAME,false);
             $this->mail->Priority = $priority;
             $this->mail->Subject = $subject;
+            $this->mail->AddCC($fromEmail);
             foreach ($filesToEmail as $file_name => $file_to_attach) {
                 $this->mail->AddAttachment($file_to_attach, $file_name);
             }
