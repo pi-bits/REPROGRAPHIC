@@ -33,8 +33,8 @@ class EmailSender
     function sendEmail($subject, $body, $filesToEmail, $priority, $fromEmail)
     {
         try {
-
-            $this->mail->setFrom(FROM_EMAIL, $fromEmail);
+            $this->mail->addReplyTo($fromEmail);
+            $this->mail->setFrom($fromEmail,FROM_NAME,false);
             $this->mail->Priority = $priority;
             $this->mail->Subject = $subject;
             foreach ($filesToEmail as $file_name => $file_to_attach) {
