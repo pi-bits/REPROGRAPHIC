@@ -24,21 +24,22 @@ class EmailSender
         $this->mail->Password   = PASSWORD;                               // SMTP password
         $this->mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
         $this->mail->Port       = 587;                                    // TCP port to connect to
-        $this->mail->addAddress(USER_NAME, NAME);                       // Add a recipient
+        $this->mail->addAddress(TO_EMAIL);                                // send to reprographics email account
         $this->mail->isHTML(true);                                        // Set email format to HTML
 
     }
 
 
-    function sendEmail($subject, $body, $filesToEmail, $priority, $fromEmail)
+    function sendEmail($subject, $body, $filesToEmail, $priority, $requesterEmail)
     {
         try {
 
-            $this->mail->addReplyTo($fromEmail);
-            $this->mail->setFrom(USER_NAME,NAME,false);
+            
+            $this->mail->setFrom(FROM_EMAIL,FROM_NAME);
             $this->mail->Priority = $priority;
             $this->mail->Subject = $subject;
-            $this->mail->AddCC($fromEmail);
+            $this->mail->addReplyTo($requesterEmail);   //when added and reply-to , will reply to this address and not to the FROM address
+            $this->mail->AddCC($requesterEmail);        //send a copy to requestor
             foreach ($filesToEmail as $file_name => $file_to_attach) {
                 $this->mail->AddAttachment($file_to_attach, $file_name);
             }
