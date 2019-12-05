@@ -9,61 +9,9 @@ $filesToEmail = array();
 
 if (isset($_POST["submit"])) {
 
-   if (hasErrors() == FALSE) {
-
-      if (!empty($_FILES['uploadDocument']['name'][0])) {
-
-         $files = $_FILES['uploadDocument'];
-         $failed = array();
-
-         foreach ($files['name'] as $position => $fileName) {
-
-            $file_tmp = $files['tmp_name'][$position];
-            $file_error = $files['error'][$position];
-            $file_size = $files['size'][$position];
-            $file_type = $files['type'][$position];
-            /**
-             * extract the file extension
-             */
-            $file_ext = strtolower(end(explode('.', $fileName)));
-
-            $extensions = array("jpeg", "jpg", "png", "docx", "pdf", "xlsx");
-            if (!in_array($file_ext, $extensions) === false) {
-               if ($file_error === 0) {
-                  if ($file_size <= 3932160) {
-                     $file_name_new = uniqid('', true) . '.' . $file_ext;
-                     $fileDestination = "uploads/" . $file_name_new;
-
-                     if (move_uploaded_file($file_tmp, $fileDestination)) {
-                        $filesToEmail[$fileName] = $fileDestination;
-                     } else {
-                        $failed[$position] = "[{$file_name}] failed to upload.";
-                     }
-                  } else {
-                     $failed[$position] = "[{$fileName}] file is too large.";
-                  }
-               } else {
-                  $failed[$position] = "[{$fileName}] failed to upload. {$file_error}";
-               }
-            } else {
-               $failed[$position] = "[{$fileName}] file extension '{$file_ext}' is not allowed.";
-            }
-         }
-
-
-         if (!empty($failed)) {
-            foreach ($failed as $key => $value) {
-               $errors['$uploadDocumentError'] = $failed[$key];
-            }
-         } else {
-            /** when has files to attach send the email any valid attachments **/
-            sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, $emailSender, $filesToEmail);
-         }
-      } else {
-         /** when not files to attach send the email without any attachments **/
-         sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, $emailSender, $filesToEmail);
-      }
-   }
+   if (!hasErrors($filesToEmail)) {
+      sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, $emailSender, $filesToEmail);
+   } 
 }
 
 function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$emailSender, &$filesToEmail)
@@ -92,7 +40,7 @@ function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$ema
    $specialRequirement = $_POST["specialRequirement"];
    $body = buildEmailBody($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $fromEmail);
    $subject = 'Reprographic Requirement for : ' . $firstName;
-   $emailSender->sendEmail($subject, $body, $filesToEmail, $priority,$fromEmail);
+   $emailSender->sendEmail($subject, $body, $filesToEmail, $priority, $fromEmail);
 }
 
 function buildEmailBody($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $fromEmail)
@@ -149,10 +97,64 @@ function buildEmailBody($firstName, $department, $printCopies, $dateRequired, $p
                  </body>
                            </html>';
 }
-function hasErrors()
+function hasErrors(&$filesToEmail)
 {
    $maxNumberOfFiles = 10;
    $errors = array();
+
+   if (!empty($_FILES['uploadDocument']['name'][0])) {
+
+      $files = $_FILES['uploadDocument'];
+      $failed = array();
+
+      if (count($_FILES['uploadDocument']['name']) > $maxNumberOfFiles) {
+         $errors['uploadDocumentError'] = "Cannot upload more than {$maxNumberOfFiles} files at one time. Please try again.";
+         return;
+      } else {
+         foreach ($files['name'] as $position => $fileName) {
+
+            $file_tmp = $files['tmp_name'][$position];
+            $file_error = $files['error'][$position];
+            $file_size = $files['size'][$position];
+            $file_type = $files['type'][$position];
+            /**
+             * extract the file extension
+             */
+            $file_ext = strtolower(end(explode('.', $fileName)));
+
+            $extensions = array("jpeg", "jpg", "png", "docx", "pdf", "xlsx");
+            if (!in_array($file_ext, $extensions) === false) {
+               if ($file_error === 0) {
+                     /** 10MB Max file size*/
+                  if ($file_size <= 10485760) {
+
+                     $file_name_new = uniqid('', true) . '.' . $file_ext;
+                     $fileDestination = "uploads/" . $file_name_new;
+
+                     if (move_uploaded_file($file_tmp, $fileDestination)) {
+                        $filesToEmail[$fileName] = $fileDestination;
+                     } else {
+                        $failed[$position] = "[{$file_name} failed to upload.";
+                     }
+                  } else {
+
+                     $failed[$position] = "[{$fileName}]  $file_size file is too large.";
+                  }
+               } else {
+                  $failed[$position] = "[{$fileName}] failed to upload. {$file_error}";
+               }
+            } else {
+               $failed[$position] = "[{$fileName}] file extension '{$file_ext}' is not allowed.";
+            }
+         }
+      }
+      if (!empty($failed)) {
+         foreach ($failed as $key => $value) {
+            $errors['uploadDocumentError'] = $failed[$key];
+         }
+      }
+   }
+
 
 
    if (empty($_POST['fromEmail'])) {
@@ -199,9 +201,7 @@ function hasErrors()
       $errors['periodError'] = "Period is required.";
    }
 
-   if (!empty($_FILES['uploadDocument']['name'][0] && count($_FILES['uploadDocument']['name']) > $maxNumberOfFiles)) {
-      $errors['uploadDocumentError'] = "Cannot upload more than {$maxNumberOfFiles} files at one time. Please try again.";
-   }
+
 
    if (empty($_POST['urgentlyRequired'])) {
       $errors['urgentlyRequiredError'] = "Required";
@@ -209,11 +209,11 @@ function hasErrors()
 
    if (count($errors) > 0) {
       $_SESSION['errors'] = $errors;
-      $error = TRUE;
+      return TRUE;
    } else {
       unset($_SESSION['errors']);
+      return FALSE;
    }
-   return $error;
 }
 
 function test_input($data)

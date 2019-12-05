@@ -364,7 +364,6 @@ include 'upload.php';
                                 <div>
                                     <?php if (isset($_SESSION['errors']['uploadDocumentError'])) echo ' <span class="errorText">' . $_SESSION['errors']['uploadDocumentError'] . '</span>'; ?>
                                 </div>
-
                             </div>
 
                         </div>
