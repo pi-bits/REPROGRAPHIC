@@ -134,7 +134,7 @@ function hasErrors(&$filesToEmail)
                      if (move_uploaded_file($file_tmp, $fileDestination)) {
                         $filesToEmail[$fileName] = $fileDestination;
                      } else {
-                        $failed[$position] = "[{$file_name} failed to upload.";
+                        $failed[$position] = "[{$file_name}] failed to upload.";
                      }
                   } else {
 

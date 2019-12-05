@@ -19,6 +19,7 @@ include 'upload.php';
         $(document).ready(function() {
             $(':input').change(function() {
                 $(this).closest('div').find('span').hide();
+                $('#errorHeader').hide();
             });
         });
     </script>
@@ -40,7 +41,11 @@ include 'upload.php';
         <p style="text-align: center;">Please use this form to request printing or copying, etc</p>
     </strong>
     <section>
-
+        <div class="row">
+        <div class="mx-auto" id="errorHeader">
+                <?php if (isset($_SESSION['errors'])) echo ' <span class="errorText">Please correct the fields in error and continue.</span>'; ?>
+            </div>
+        </div>
         <div class="container mt-3">
             <div class="row">
                 <div class="col-sm-3">
@@ -51,6 +56,8 @@ include 'upload.php';
                         <div class="col-sm-2"></div>
                     </div>
                     <form action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" role="form" enctype="multipart/form-data" id="requirmentForm" name="requirmentForm">
+
+
                         <div class="form-group required row">
                             <div class="col-md-2"></div>
                             <div class="col-md-9">

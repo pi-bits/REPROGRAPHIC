@@ -47,6 +47,7 @@ class EmailSender
             $this->mail->send();
             echo 'Message has been sent';
             $_POST = array();
+
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}";
             error_log("Message could not be sent. Mailer Error: ", $this->mail->ErrorInfo . $e);
