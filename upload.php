@@ -1,20 +1,18 @@
 <?php
-
-include 'email.php';
+require './email.php';
 require './includes/constants.php';
 require './includes/referenceDataConfig.php';
 
-$emailSender  = new EmailSender();
 $filesToEmail = array();
-
 if (isset($_POST["submit"])) {
-
+   $GLOBALS['IsEmailSent']=false;
    if (!hasErrors($filesToEmail)) {
-      sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, $emailSender, $filesToEmail);
+      sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, $filesToEmail);
+      $GLOBALS['IsEmailSent']=true;
    } 
 }
 
-function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$emailSender, &$filesToEmail)
+function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$filesToEmail)
 {
    $printType = "";
    if (!empty($_POST['check_list'])) {
@@ -24,7 +22,6 @@ function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$ema
    } else {
       $printType = "Default Prints";
    }
-
    $firstName =  $_POST["firstname"];
    $fromEmail =  $_POST["fromEmail"];
    $department = $DEPARTMENT_CONFIG[$_POST["department"]];
@@ -32,18 +29,20 @@ function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$ema
    $dateRequired  = date("d-M-Y", strtotime($_POST["Dates"]));
    $period = $PERIOD_CONFIG[$_POST["period"]];
    $urgentlyRequired = $_POST["urgentlyRequired"];
+
    /**
     * Options: null (default), 1 = High, 3 = Normal, 5 = low. When null, the header is not set at all.
     */
    $priority = $urgentlyRequired == 'Yes' ? 1 : 3;
-
    $specialRequirement = $_POST["specialRequirement"];
-   $body = buildEmailBody($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $fromEmail);
+   $url=$_POST["url"];
+   $body = buildEmailBody($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $url, $fromEmail);
    $subject = 'Reprographic Requirement for : ' . $firstName;
-   $emailSender->sendEmail($subject, $body, $filesToEmail, $priority, $fromEmail);
+   
+   $emailSender  = new EmailSender();
+   $emailSender->send($subject, $body, $filesToEmail, $priority, $fromEmail);
 }
-
-function buildEmailBody($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $fromEmail)
+function buildEmailBody($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $url, $fromEmail)
 {
    return '<html>
                <head>
@@ -92,6 +91,10 @@ function buildEmailBody($firstName, $department, $printCopies, $dateRequired, $p
                      <th>Special Requirements (if any)</th>
                      <td>' . $specialRequirement . '</td>
                    </tr>
+                   <tr>
+                     <th>URL for print copies</th>
+                     <td>' . $url . '</td>
+                   </tr>
                  </table>
                  <br/>
                  </body>
@@ -101,18 +104,14 @@ function hasErrors(&$filesToEmail)
 {
    $maxNumberOfFiles = 10;
    $errors = array();
-
    if (!empty($_FILES['uploadDocument']['name'][0])) {
-
       $files = $_FILES['uploadDocument'];
       $failed = array();
-
       if (count($_FILES['uploadDocument']['name']) > $maxNumberOfFiles) {
          $errors['uploadDocumentError'] = "Cannot upload more than {$maxNumberOfFiles} files at one time. Please try again.";
          return;
       } else {
          foreach ($files['name'] as $position => $fileName) {
-
             $file_tmp = $files['tmp_name'][$position];
             $file_error = $files['error'][$position];
             $file_size = $files['size'][$position];
@@ -121,23 +120,19 @@ function hasErrors(&$filesToEmail)
              * extract the file extension
              */
             $file_ext = strtolower(end(explode('.', $fileName)));
-
-            $extensions = array("jpeg", "jpg", "png", "docx", "pdf", "xlsx");
+            $extensions = array("jpeg", "xlsm", "jpg", "png", "docx", "pdf", "xlsx","pptx","ppt","pub","odt","doc","rtf","tex","txt","wks","wps","wpd","ods","xlr","xls","key","odp","pps","ai","bmp","gif","ico","ps","psd","svg","tif","tiff","fnt","fon","otf","ttf","csv","dat","db","dbf","log","mdb","sav","sql","tar","xml","zip","z","rpm","rar","pkg","deb","arj","7z");
             if (!in_array($file_ext, $extensions) === false) {
                if ($file_error === 0) {
                      /** 10MB Max file size*/
                   if ($file_size <= 10485760) {
-
                      $file_name_new = uniqid('', true) . '.' . $file_ext;
                      $fileDestination = "uploads/" . $file_name_new;
-
                      if (move_uploaded_file($file_tmp, $fileDestination)) {
                         $filesToEmail[$fileName] = $fileDestination;
                      } else {
-                        $failed[$position] = "[{$file_name}] failed to upload.";
+                        $failed[$position] = "[{$fileName}] failed to upload.";
                      }
                   } else {
-
                      $failed[$position] = "[{$fileName}]  $file_size file is too large.";
                   }
                } else {
@@ -154,9 +149,6 @@ function hasErrors(&$filesToEmail)
          }
       }
    }
-
-
-
    if (empty($_POST['fromEmail'])) {
       $errors['fromEmailError'] = "Email address is required.";
    } else {
@@ -165,8 +157,6 @@ function hasErrors(&$filesToEmail)
          $errors['fromEmailError'] = "Enter a valid email address.";
       }
    }
-
-
    if (empty($_POST['firstname'])) {
       $errors['firstnameError'] = "Name is required.";
    } else {
@@ -175,11 +165,9 @@ function hasErrors(&$filesToEmail)
          $errors['firstnameError'] = "Only letters and white space allowed.";
       }
    }
-
    if (empty($_POST['department'])) {
       $errors['departmentError'] = "Department/Budget is required.";
    }
-
    if (empty($_POST['printCopies'])) {
       $errors['printCopiesError'] = "Number of copy is required.";
    }
@@ -196,17 +184,12 @@ function hasErrors(&$filesToEmail)
          $errors['printDateError'] = "Print Date is required.";
       }
    }
-
    if (empty($_POST['period'])) {
       $errors['periodError'] = "Period is required.";
    }
-
-
-
    if (empty($_POST['urgentlyRequired'])) {
       $errors['urgentlyRequiredError'] = "Required";
    }
-
    if (count($errors) > 0) {
       $_SESSION['errors'] = $errors;
       return TRUE;
@@ -215,7 +198,6 @@ function hasErrors(&$filesToEmail)
       return FALSE;
    }
 }
-
 function test_input($data)
 {
    $data = trim($data);

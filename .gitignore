@@ -29,6 +29,7 @@ Temporary Items
 
 # exclude everything
 uploads/*
+includes/constants.php
 
 # exception to the rule
 !uploads/.gitkeep 

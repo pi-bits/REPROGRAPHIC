@@ -1,11 +1,31 @@
-.form-group.required .control-label:after { 
-    content:"*";
-    color:red;
- }
- .form-group.required .form-check-label:after { 
-    content:"*";
-    color:red;
- }
- .errorText{
-    color:red
-    }
+.form-group.required .control-label:after {
+    content: "*";
+    color: red;
+}
+
+.form-group.required .form-check-label:after {
+    content: "*";
+    color: red;
+}
+
+.errorText {
+    color: red;
+}
+
+div.userHeaderContainer {
+    text-align: left;
+    padding-top: 1em;
+}
+
+body {
+    background-color: whitesmoke;
+}
+
+hr {
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    border-width: 2px;
+}
