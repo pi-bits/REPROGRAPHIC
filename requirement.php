@@ -207,7 +207,16 @@ unset($_SESSION["ULanding"]); //clear session variable
 
                 <div class="form-group required w-50" id="url">
                     <label for="url" class="control-label-optional">URL for print copies:</label>
-                    <textarea class="form-control form-control-sm" rows="2" id="url" name="url"></textarea>
+
+                    <?php
+                    if (isset($_POST["url"])) {
+                        echo "<textarea class='form-control form-control form-control-sm' rows='2' id='url'  name='url'  >" . $_POST['url'] . "</textarea>";
+                    } else {
+                        echo "<textarea class='form-control form-control form-control-sm' rows='2' id='url'  name='url'></textarea>";
+                    }
+                    ?>
+
+
                 </div>
 
                 <div class="form-group required w-50">
