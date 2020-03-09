@@ -100,11 +100,11 @@ unset($_SESSION["ULanding"]); //clear session variable
                     <select name="period" class="form-control">
                         <option value="">--Please select--</option>
                         <?php
-                        foreach ($PERIOD_CONFIG as $key => $value) {
+                        foreach ($PERIOD_CONFIG as $value) {
                             if (isset($_POST["period"]) && $_POST["period"] == $value) {
-                                echo "<option value='$key' selected>$value</key>";
+                                echo "<option value='$value' selected>$value</key>";
                             } else {
-                                echo "<option value='$key'>$value</key>";
+                                echo "<option value='$value'>$value</key>";
                             }
                         }
                         ?>
@@ -114,11 +114,13 @@ unset($_SESSION["ULanding"]); //clear session variable
 
                 <div class="form-group required w-25">
                     <p class="form-check-label">Urgently Required :</p>
-                    <div class="form-check-inline">
-                        <input type="radio" class="form-check-input" value="Yes" name="urgentlyRequired" <?php if (isset($_POST["urgentlyRequired"]) && $_POST["urgentlyRequired"] == "Yes") print(" checked") ?>>Yes
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="urgentlyRequiredYes"  value="Yes" name="urgentlyRequired" class="custom-control-input" <?php if (isset($_POST["urgentlyRequired"]) && $_POST["urgentlyRequired"] == "Yes") print(" checked") ?>>
+                        <label class="custom-control-label" for="urgentlyRequiredYes">Yes</label>
                     </div>
-                    <div class="form-check-inline">
-                        <input type="radio" class="form-check-input" value="No" name="urgentlyRequired" <?php if (isset($_POST["urgentlyRequired"]) && $_POST["urgentlyRequired"] == "No") print(" checked") ?>>No
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="urgentlyRequiredNo"  value="No" name="urgentlyRequired" class="custom-control-input" <?php if (isset($_POST["urgentlyRequired"]) && $_POST["urgentlyRequired"] == "No") print(" checked") ?>>
+                        <label class="custom-control-label" for="urgentlyRequiredNo">No</label>
                     </div>
                     <div>
                         <?php if (isset($_SESSION['errors']['urgentlyRequiredError'])) echo ' <span class="errorText">' . $_SESSION['errors']['urgentlyRequiredError'] . '</span>'; ?>
@@ -136,39 +138,25 @@ unset($_SESSION["ULanding"]); //clear session variable
                             <p class="card-title">Standard prints will be double sided and black & white, If you need anything different from this please enter the specific details below.</p>
                         </div>
                         <ul class="list-group list-group-flush">
-
                             <?php
                             foreach ($PRINT_TYPE_CONFIG as $value) {
-                                
-                                if (!empty($_POST['check_list'])) {
-                                    if (in_array($value, $_POST['check_list'])) {
-                                        echo
-                                            "<li class='list-group-item py-0'>
-                                                <div class='required row'>
-                                                    <div class='col'>
-                                                    <label class='checkbox'>$value</label>
-                                                    </div>
-                                                    <div class='col'>
-                                                    <input type='checkbox' name='check_list[]' checked value='$value'>
-                                                    </div>
-                                                </div>
-                                            </li>";
-                                    } else{
-                                        echo
-                                        "<li class='list-group-item py-0'>
-                                        <div class='required row'>
-                                            <div class='col'>
-                                            <label class='checkbox'>$value</label>
-                                            </div>
-                                            <div class='col'>
-                                            <input type='checkbox' name='check_list[]' value='$value'>
-                                            </div>
-                                        </div>
+                                if (!empty($_POST['check_list']) && in_array($value, $_POST['check_list'])) {
+                                    echo "<li class='list-group-item py-2'>
+                                    <div class='required row'>
+                                    <div class='col custom-control custom-checkbox'>
+                                    <input type='checkbox' name='check_list[]'  id='$value' checked value='$value' class='custom-control-input'>
+                                    <label class='custom-control-label' for='$value'>$value</label>
+                                    </div>
                                     </li>";
-                                    }
-                                } 
-                                    
-                                
+                                } else {
+                                    echo "<li class='list-group-item py-2'>
+                                    <div class='required row'>
+                                    <div class='col custom-control custom-checkbox'>
+                                    <input type='checkbox' name='check_list[]' id='$value' value='$value' class='custom-control-input'>
+                                    <label class='custom-control-label' for='$value'>$value</label>
+                                    </div>
+                                    </li>";
+                                }
                             }
                             ?>
                         </ul>

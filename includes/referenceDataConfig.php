@@ -66,7 +66,7 @@ $DEPARTMENT_CONFIG = array (
   );
 
 
-  $PRINT_TYPE_CONFIG = array (
+   $PRINT_TYPE_CONFIG = array (
     'Standard Print',
     'Colour',
     '2 to a page',
@@ -84,11 +84,11 @@ $DEPARTMENT_CONFIG = array (
   );
 
   $PERIOD_CONFIG = array (
-    'Period1' => 'Period1',
-    'Period2' => 'Period2',
-    'Break' => 'Break',
-    'Period3' => 'Period3',
-    'Period4' => 'Period4',
-    'Period5' => 'Period5',
-    'Period6' => 'Period6',
+    'Period1',
+    'Period2',
+    'Break',
+    'Period3',
+    'Period4',
+    'Period5',
+    'Period6',
   );

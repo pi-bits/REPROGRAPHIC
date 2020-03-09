@@ -6,28 +6,27 @@ require './includes/referenceDataConfig.php';
 $filesToEmail = array();
 if (isset($_POST["submit"])) {
    $GLOBALS['IsEmailSent'] = false;
-   if (!hasErrors($filesToEmail)) {
-      sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, $filesToEmail);
+   if (!hasErrors($filesToEmail,$PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG)) {
+      sendEmail($filesToEmail);
       $GLOBALS['IsEmailSent'] = true;
    }
 }
 
-function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$filesToEmail)
+function sendEmail(&$filesToEmail)
 {
-   $printType = "";
    if (!empty($_POST['check_list'])) {
       foreach ($_POST['check_list'] as $selected) {
-         $printType = $printType . $PRINT_TYPE_CONFIG[$selected] . ",";
+         $printType .=  $selected . ",";
       }
    } else {
       $printType = "Default Prints";
    }
    $firstName =  $_POST["firstname"];
    $fromEmail =  $_POST["fromEmail"];
-   $department = $DEPARTMENT_CONFIG[$_POST["department"]];
+   $department = $_POST["department"];
    $printCopies =  $_POST["printCopies"];
    $dateRequired  = date("d-M-Y", strtotime($_POST["Dates"]));
-   $period = $PERIOD_CONFIG[$_POST["period"]];
+   $period = $_POST["period"];
    $urgentlyRequired = $_POST["urgentlyRequired"];
 
    /**
@@ -100,8 +99,9 @@ function buildEmailBody($firstName, $department, $printCopies, $dateRequired, $p
                  </body>
                            </html>';
 }
-function hasErrors(&$filesToEmail)
+function hasErrors(&$filesToEmail,$PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG)
 {
+   
    $maxNumberOfFiles = 10;
    $errors = array();
    if (!empty($_FILES['uploadDocument']['name'][0])) {
@@ -154,23 +154,8 @@ function hasErrors(&$filesToEmail)
          }
       }
    }
-   if (empty($_POST['fromEmail'])) {
-      $errors['fromEmailError'] = "Email address is required.";
-   } else {
-      $fromEmail = test_input($_POST["fromEmail"]);
-      if (!emailValidation($fromEmail)) {
-         $errors['fromEmailError'] = "Enter a valid email address.";
-      }
-   }
-   if (empty($_POST['firstname'])) {
-      $errors['firstnameError'] = "Name is required.";
-   } else {
-      $firstname = test_input($_POST["firstname"]);
-      if (!preg_match("/^[a-zA-Z ]*$/", $firstname)) {
-         $errors['firstnameError'] = "Only letters and white space allowed.";
-      }
-   }
-   if (empty($_POST['department'])) {
+
+   if (empty($_POST['department']) &&  !in_array($_POST['department'], $DEPARTMENT_CONFIG)) {
       $errors['departmentError'] = "Department/Budget is required.";
    }
    if (empty($_POST['printCopies'])) {
@@ -189,7 +174,18 @@ function hasErrors(&$filesToEmail)
          $errors['printDateError'] = "Print Date is required.";
       }
    }
-   if (empty($_POST['period'])) {
+   
+   if (!$_POST['check_list[]']) {
+      foreach($_POST['check_list[]'] as $value){
+         if(!in_array($value, $PRINT_TYPE_CONFIG)){
+            $errors['printConfiguration'] = "Invalid Selection for Print Types.";
+            return;
+         }
+      }
+
+      
+   }
+   if (empty($_POST['period']) && !in_array($_POST['period'], $PERIOD_CONFIG)) {
       $errors['periodError'] = "Period is required.";
    }
    if (empty($_POST['urgentlyRequired'])) {
