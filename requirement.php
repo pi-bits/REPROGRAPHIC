@@ -73,11 +73,11 @@ unset($_SESSION["ULanding"]); //clear session variable
                     <select name="department" class="form-control" id="department">
                         <option value="">--Please select--</option>
                         <?php
-                        foreach ($DEPARTMENT_CONFIG as $key => $value) {
+                        foreach ($DEPARTMENT_CONFIG as $value) {
                             if (isset($_POST["department"]) && $_POST["department"] == $value) {
-                                echo "<option value='$key' selected>$value</key>";
+                                echo "<option value='$value' selected>$value</key>";
                             } else {
-                                echo "<option value='$key'>$value</key>";
+                                echo "<option value='$value'>$value</key>";
                             }
                         }
                         ?>
@@ -117,11 +117,9 @@ unset($_SESSION["ULanding"]); //clear session variable
                     <div class="form-check-inline">
                         <input type="radio" class="form-check-input" value="Yes" name="urgentlyRequired" <?php if (isset($_POST["urgentlyRequired"]) && $_POST["urgentlyRequired"] == "Yes") print(" checked") ?>>Yes
                     </div>
-
                     <div class="form-check-inline">
                         <input type="radio" class="form-check-input" value="No" name="urgentlyRequired" <?php if (isset($_POST["urgentlyRequired"]) && $_POST["urgentlyRequired"] == "No") print(" checked") ?>>No
                     </div>
-
                     <div>
                         <?php if (isset($_SESSION['errors']['urgentlyRequiredError'])) echo ' <span class="errorText">' . $_SESSION['errors']['urgentlyRequiredError'] . '</span>'; ?>
                     </div>
@@ -140,10 +138,10 @@ unset($_SESSION["ULanding"]); //clear session variable
                         <ul class="list-group list-group-flush">
 
                             <?php
-                            foreach ($PRINT_TYPE_CONFIG as $key => $value) {
-
+                            foreach ($PRINT_TYPE_CONFIG as $value) {
+                                
                                 if (!empty($_POST['check_list'])) {
-                                    if (in_array($value, $_POST['check_list']) === true) {
+                                    if (in_array($value, $_POST['check_list'])) {
                                         echo
                                             "<li class='list-group-item py-0'>
                                                 <div class='required row'>
@@ -151,36 +149,26 @@ unset($_SESSION["ULanding"]); //clear session variable
                                                     <label class='checkbox'>$value</label>
                                                     </div>
                                                     <div class='col'>
-                                                    <input type='checkbox' name='check_list[]' checked value=$value>
+                                                    <input type='checkbox' name='check_list[]' checked value='$value'>
                                                     </div>
                                                 </div>
                                             </li>";
-                                    } else {
+                                    } else{
                                         echo
-                                            "<li class='list-group-item py-0'>
-                                        <div class='required row'>
-                                            <div class='col'>
-                                            <label class='checkbox'>$value</label>
-                                            </div>
-                                            <div class='col'>
-                                            <input type='checkbox' name='check_list[]' value=$value>
-                                            </div>
-                                        </div>
-                                    </li>";
-                                    }
-                                } else {
-                                    echo
                                         "<li class='list-group-item py-0'>
                                         <div class='required row'>
                                             <div class='col'>
                                             <label class='checkbox'>$value</label>
                                             </div>
                                             <div class='col'>
-                                            <input type='checkbox' name='check_list[]' value=$value>
+                                            <input type='checkbox' name='check_list[]' value='$value'>
                                             </div>
                                         </div>
                                     </li>";
-                                }
+                                    }
+                                } 
+                                    
+                                
                             }
                             ?>
                         </ul>
