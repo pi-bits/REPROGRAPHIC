@@ -48,7 +48,7 @@ class EmailSender
             unset($_POST);
             error_log("Reprograhics request sent successfully for : ".$requesterEmail);
         } catch (Exception $e) {
-            error_log("REPROGRAPHICS MAILER -  error sending EMAIL : ". $this->mail->ErrorInfo . $e->errorMessage());
+            error_log("REPROGRAPHICS MAILER -  error sending EMAIL : ".$this->mail->ErrorInfo . $e->errorMessage());
             throw $e;
         }
     }

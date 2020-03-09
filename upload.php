@@ -131,6 +131,7 @@ function hasErrors(&$filesToEmail,$PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIO
             if (!in_array($file_ext, $extensions) === false) {
                if ($file_error === 0) {
                   /** 10MB Max file size*/
+                  error_log("File size  : ".$file_size. " for file :" .$fileName);
                   if ($file_size <= 10485760) {
                      $file_name_new = uniqid('', true) . '.' . $file_ext;
                      $destinationPath = getcwd() . DIRECTORY_SEPARATOR . 'uploads';
@@ -143,15 +144,19 @@ function hasErrors(&$filesToEmail,$PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIO
                         $filesToEmail[$fileName] = $fileDestination;
                      } else {
                         $failed[$position] = "[{$fileName}] failed to upload.";
+                        error_log("[{$fileName}] failed move file - check permissions.");
                      }
                   } else {
                      $failed[$position] = "[{$fileName}]  $file_size file is too large.";
+                     error_log("[{$fileName}]  $file_size file is too large.");
                   }
                } else {
                   $failed[$position] = "[{$fileName}] failed to upload. {$file_error}";
+                  error_log("[{$fileName}] failed to upload. {$file_error}");
                }
             } else {
                $failed[$position] = "[{$fileName}] file extension '{$file_ext}' is not allowed.";
+               error_log("[{$fileName}] file extension '{$file_ext}' is not allowed.");
             }
          }
       }
