@@ -29,3 +29,23 @@ hr {
     margin-right: auto;
     border-width: 2px;
 }
+
+p.form-check-label {
+    margin-bottom: 1em;
+}
+
+input[type=radio] {
+    margin-top: 2em;
+    width: 2em;
+    height: 1.5em;
+}
+
+input[type=checkbox] {
+    margin-top: 0.5rem;
+    width: 2em;
+    height: 1.5em;
+}
+
+label.checkbox {
+    margin-top: 0.5rem;
+}

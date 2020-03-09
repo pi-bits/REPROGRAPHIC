@@ -5,11 +5,11 @@ require './includes/referenceDataConfig.php';
 
 $filesToEmail = array();
 if (isset($_POST["submit"])) {
-   $GLOBALS['IsEmailSent']=false;
+   $GLOBALS['IsEmailSent'] = false;
    if (!hasErrors($filesToEmail)) {
       sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, $filesToEmail);
-      $GLOBALS['IsEmailSent']=true;
-   } 
+      $GLOBALS['IsEmailSent'] = true;
+   }
 }
 
 function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$filesToEmail)
@@ -35,10 +35,10 @@ function sendEmail($PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG, &$fil
     */
    $priority = $urgentlyRequired == 'Yes' ? 1 : 3;
    $specialRequirement = $_POST["specialRequirement"];
-   $url=$_POST["url"];
+   $url = $_POST["url"];
    $body = buildEmailBody($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $url, $fromEmail);
    $subject = 'Reprographic Requirement for : ' . $firstName;
-   
+
    $emailSender  = new EmailSender();
    $emailSender->send($subject, $body, $filesToEmail, $priority, $fromEmail);
 }
@@ -120,13 +120,18 @@ function hasErrors(&$filesToEmail)
              * extract the file extension
              */
             $file_ext = strtolower(end(explode('.', $fileName)));
-            $extensions = array("jpeg", "xlsm", "jpg", "png", "docx", "pdf", "xlsx","pptx","ppt","pub","odt","doc","rtf","tex","txt","wks","wps","wpd","ods","xlr","xls","key","odp","pps","ai","bmp","gif","ico","ps","psd","svg","tif","tiff","fnt","fon","otf","ttf","csv","dat","db","dbf","log","mdb","sav","sql","tar","xml","zip","z","rpm","rar","pkg","deb","arj","7z");
+            $extensions = array("jpeg", "xlsm", "jpg", "png", "docx", "pdf", "xlsx", "pptx", "ppt", "pub", "odt", "doc", "rtf", "tex", "txt", "wks", "wps", "wpd", "ods", "xlr", "xls", "key", "odp", "pps", "ai", "bmp", "gif", "ico", "ps", "psd", "svg", "tif", "tiff", "fnt", "fon", "otf", "ttf", "csv", "dat", "db", "dbf", "log", "mdb", "sav", "sql", "tar", "xml", "zip", "z", "rpm", "rar", "pkg", "deb", "arj", "7z");
             if (!in_array($file_ext, $extensions) === false) {
                if ($file_error === 0) {
-                     /** 10MB Max file size*/
+                  /** 10MB Max file size*/
                   if ($file_size <= 10485760) {
                      $file_name_new = uniqid('', true) . '.' . $file_ext;
-                     $fileDestination = "uploads/" . $file_name_new;
+                     $destinationPath = getcwd() . DIRECTORY_SEPARATOR . 'uploads';
+                     if (!file_exists($destinationPath)) {
+                        mkdir($destinationPath, 0777, true);
+                     }
+
+                     $fileDestination =  getcwd() . DIRECTORY_SEPARATOR . 'uploads/' . $file_name_new;
                      if (move_uploaded_file($file_tmp, $fileDestination)) {
                         $filesToEmail[$fileName] = $fileDestination;
                      } else {
