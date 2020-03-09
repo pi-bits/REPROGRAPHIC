@@ -7,20 +7,20 @@ $filesToEmail = array();
 if (isset($_POST["submit"])) {
    $GLOBALS['IsEmailSent'] = false;
    if (!hasErrors($filesToEmail,$PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIOD_CONFIG)) {
-      sendEmail($filesToEmail);
-      $GLOBALS['IsEmailSent'] = true;
+         sendEmail($filesToEmail);
    }
 }
 
 function sendEmail(&$filesToEmail)
-{
+{ 
+   $printType = "Default Prints";
+
    if (!empty($_POST['check_list'])) {
+      $printType="";
       foreach ($_POST['check_list'] as $selected) {
          $printType .=  $selected . ",";
       }
-   } else {
-      $printType = "Default Prints";
-   }
+   } 
    $firstName =  $_POST["firstname"];
    $fromEmail =  $_POST["fromEmail"];
    $department = $_POST["department"];
@@ -39,7 +39,13 @@ function sendEmail(&$filesToEmail)
    $subject = 'Reprographic Requirement for : ' . $firstName;
 
    $emailSender  = new EmailSender();
-   $emailSender->send($subject, $body, $filesToEmail, $priority, $fromEmail);
+   try{
+      $emailSender->send($subject, $body, $filesToEmail, $priority, $fromEmail);
+      $GLOBALS['IsEmailSent'] = true;
+   }
+   catch(Exception $e){
+         $GLOBALS['IsEmailSent'] = false;
+   }
 }
 function buildEmailBody($firstName, $department, $printCopies, $dateRequired, $period, $urgentlyRequired, $printType, $specialRequirement, $url, $fromEmail)
 {
@@ -119,7 +125,8 @@ function hasErrors(&$filesToEmail,$PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIO
             /**
              * extract the file extension
              */
-            $file_ext = strtolower(end(explode('.', $fileName)));
+            $tmp =explode('.', $fileName);
+            $file_ext = strtolower(end($tmp));
             $extensions = array("jpeg", "xlsm", "jpg", "png", "docx", "pdf", "xlsx", "pptx", "ppt", "pub", "odt", "doc", "rtf", "tex", "txt", "wks", "wps", "wpd", "ods", "xlr", "xls", "key", "odp", "pps", "ai", "bmp", "gif", "ico", "ps", "psd", "svg", "tif", "tiff", "fnt", "fon", "otf", "ttf", "csv", "dat", "db", "dbf", "log", "mdb", "sav", "sql", "tar", "xml", "zip", "z", "rpm", "rar", "pkg", "deb", "arj", "7z");
             if (!in_array($file_ext, $extensions) === false) {
                if ($file_error === 0) {
@@ -175,8 +182,8 @@ function hasErrors(&$filesToEmail,$PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIO
       }
    }
    
-   if (!$_POST['check_list[]']) {
-      foreach($_POST['check_list[]'] as $value){
+   if (!isset($_POST['check_list[]'])) {
+      foreach ( (array)isset($_POST['check_list[]']) as $value){
          if(!in_array($value, $PRINT_TYPE_CONFIG)){
             $errors['printConfiguration'] = "Invalid Selection for Print Types.";
             return;

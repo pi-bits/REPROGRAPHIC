@@ -43,7 +43,7 @@ unset($_SESSION["ULanding"]); //clear session variable
             </div>
             <div class="col align-self-end">
                 <?php
-                echo "<b>" . $_SESSION['LFirstname'] . " " . $_SESSION['LLastname'] . "</b>";
+                echo "<b>" . isset($_SESSION['LFirstname']) . " " . isset($_SESSION['LLastname']) . "</b>";
                 ?>
                 <a href="/Includes/LogOut.php"><img src=/Images/ButtonLogOut.png width="100"></a>
 
@@ -59,15 +59,16 @@ unset($_SESSION["ULanding"]); //clear session variable
                 <h4 style="text-align: left;display: block;">Reprographic Requirement Form</h4>
                 <h6 style="text-align: left; display: block;">Please use this form to request printing or copying, etc</h5>
                     <?php echo isset($_SESSION['errors']) ?  ' <span class="errorText">Please correct the fields in error and continue.</span>' :  ''; ?>
-                    <?php if ($IsEmailSent === TRUE)    echo '<strong><span class="errorText">Your request has been emailed to Reprographics.</span></strong>'; ?>
+                    <?php if ( $GLOBALS['IsEmailSent']=== TRUE)    echo '<strong><span class="errorText">Your request has been emailed to Reprographics.</span></strong>'; ?>
+                   
 
             </div>
         </div>
         <hr />
         <div class="row justify-content-center">
             <form class="col" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" role="form" enctype="multipart/form-data" id="requirmentForm" name="requirmentForm">
-                <input type="hidden" id="firstname" name="firstname" value="<?php echo isset($_SESSION['LUser']) ? $_SESSION['LFirstname'] . " " . $_SESSION['LLastname'] : ''; ?>">
-                <input type="hidden" id="fromEmail" name="fromEmail" value="<?php echo isset($_SESSION['LUser']) ? $_SESSION['LEmail'] : ''; ?>">
+                <input type="hidden" id="firstname" name="firstname" value="<?php echo isset($_SESSION['LUser']) ? isset($_SESSION['LFirstname']) . " " . isset($_SESSION['LLastname']) : ''; ?>">
+                <input type="hidden" id="fromEmail" name="fromEmail" value="<?php echo isset($_SESSION['LUser']) ? isset($_SESSION['LEmail']) : ''; ?>">
                 <div class="form-group required w-25">
                     <label for="department" class="control-label">Budget/Department:</label>
                     <select name="department" class="form-control" id="department">

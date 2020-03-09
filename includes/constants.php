@@ -1,7 +1,7 @@
 <?php
-define('USER_NAME','');                              //SMTP user name
-define('PASSWORD','');                               //SMTP password
-define('TO_EMAIL','');                               //Reprographics email
-define('FROM_EMAIL','');                             //Reprographics email
-define('FROM_NAME','');                              //Reprographics email name
+if (!defined('USER_NAME')) define('USER_NAME','<>');                              //SMTP user name
+if (!defined('PASSWORD')) define('PASSWORD','<>');                               //SMTP password
+if (!defined('TO_EMAIL')) define('TO_EMAIL','<>');                               //Reprographics email
+if (!defined('FROM_EMAIL')) define('FROM_EMAIL','<>');                             //Reprographics email
+if (!defined('FROM_NAME')) define('FROM_NAME','<>');                              //Reprographics email name
        ?>

@@ -45,11 +45,11 @@ class EmailSender
             }
             $this->mail->Body  = $body;
             $this->mail->send();
-            
-            $_POST = array();
+            unset($_POST);
+            error_log("Reprograhics request sent successfully for : ".$requesterEmail);
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$this->mail->ErrorInfo}";
-            error_log("Message could not be sent. Mailer Error: ", $this->mail->ErrorInfo . $e);
+            error_log("REPROGRAPHICS MAILER -  error sending EMAIL : ". $this->mail->ErrorInfo . $e->errorMessage());
+            throw $e;
         }
     }
     
