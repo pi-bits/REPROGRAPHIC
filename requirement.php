@@ -1,5 +1,5 @@
 <?php
-$IsEmailSent=false;
+$IsEmailSent = false;
 include "./imports.php";
 unset($_SESSION["ULanding"]); //clear session variable
 ?>
@@ -58,12 +58,12 @@ unset($_SESSION["ULanding"]); //clear session variable
             <div class="col">
                 <h4 style="text-align: left;display: block;">Reprographic Requirement Form</h4>
                 <h6 style="text-align: left; display: block;">Please use this form to request printing or copying, etc</h5>
-                <?php echo isset($_SESSION['errors']) ?  ' <span class="errorText">Please correct the fields in error and continue.</span>' :  '';?>
-                <?php  if($IsEmailSent===TRUE)    echo '<strong><span class="errorText">Your request has been emailed to Reprographics.</span></strong>';?>
+                    <?php echo isset($_SESSION['errors']) ?  ' <span class="errorText">Please correct the fields in error and continue.</span>' :  ''; ?>
+                    <?php if ($IsEmailSent === TRUE)    echo '<strong><span class="errorText">Your request has been emailed to Reprographics.</span></strong>'; ?>
 
             </div>
         </div>
-        <hr/>
+        <hr />
         <div class="row justify-content-center">
             <form class="col" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" method="POST" role="form" enctype="multipart/form-data" id="requirmentForm" name="requirmentForm">
                 <input type="hidden" id="firstname" name="firstname" value="<?php echo isset($_SESSION['LUser']) ? $_SESSION['LFirstname'] . " " . $_SESSION['LLastname'] : ''; ?>">
@@ -72,69 +72,15 @@ unset($_SESSION["ULanding"]); //clear session variable
                     <label for="department" class="control-label">Budget/Department:</label>
                     <select name="department" class="form-control" id="department">
                         <option value="">--Please select--</option>
-                        <option value="Art" <?php if (isset($_POST["department"]) && $_POST["department"] == "Art") print(" selected") ?>>Art</option>
-                        <option value="BusinessStudies" <?php if (isset($_POST["department"]) && $_POST["department"] == "BusinessStudies") print(" selected") ?>>Business Studies</option>
-                        <option value="Catering" <?php if (isset($_POST["department"]) && $_POST["department"] == "Catering") print(" selected") ?>>Catering</option>
-                        <option value="Computer Science" <?php if (isset($_POST["department"]) && $_POST["department"] == "Computer Science") print(" selected") ?>>Computer Science</option>
-
-                        <option value="Creative" <?php if (isset($_POST["department"]) && $_POST["department"] == "Creative") print(" selected") ?>>Creative</option>
-                        <option value="Dance" <?php if (isset($_POST["department"]) && $_POST["department"] == "Dance") print(" selected") ?>>Dance</option>
-                        <option value="Design" <?php if (isset($_POST["department"]) && $_POST["department"] == "Design") print(" selected") ?>>Design</option>
-                        <option value="DropDownDay" <?php if (isset($_POST["department"]) && $_POST["department"] == "DropDownDay") print(" selected") ?>>Drop Down Day</option>
-                        <option value="Duke of Edinburgh" <?php if (isset($_POST["department"]) && $_POST["department"] == "Duke of Edinburgh") print(" selected") ?>>Duke of Edinburgh</option>
-                        <option value="English" <?php if (isset($_POST["department"]) && $_POST["department"] == "English") print(" selected") ?>>English</option>
-                        <option value="Exams" <?php if (isset($_POST["department"]) && $_POST["department"] == "Exams") print(" selected") ?>>Exams</option>
-                        <option value="Excellence" <?php if (isset($_POST["department"]) && $_POST["department"] == "Excellence") print(" selected") ?>>Excellence</option>
-                        <option value="Finance" <?php if (isset($_POST["department"]) && $_POST["department"] == "Finance") print(" selected") ?>>Finance</option>
-                        <option value="Geography" <?php if (isset($_POST["department"]) && $_POST["department"] == "Geography") print(" selected") ?>>Geography</option>
-                        <option value="Hazeley Plus" <?php if (isset($_POST["department"]) && $_POST["department"] == "Hazeley Plus") print(" selected") ?>>Hazeley Plus</option>
-                        <option value="Health and Social" <?php if (isset($_POST["department"]) && $_POST["department"] == "Health and Social") print(" selected") ?>>Health and Social</option>
-                        <option value="History" <?php if (isset($_POST["department"]) && $_POST["department"] == "History") print(" selected") ?>>History</option>
-                        <option value="HR" <?php if (isset($_POST["department"]) && $_POST["department"] == "HR") print(" selected") ?>>HR</option>
-                        <option value="Humanities" <?php if (isset($_POST["department"]) && $_POST["department"] == "Humanities") print(" selected") ?>>Humanities</option>
-                        <option value="ICT" <?php if (isset($_POST["department"]) && $_POST["department"] == "ICT") print(" selected") ?>>ICT</option>
-                        <option value="Inset Training " <?php if (isset($_POST["department"]) && $_POST["department"] == "Inset Training") print(" selected") ?>>Inset Training</option>
-                        <option value="Intervention" <?php if (isset($_POST["department"]) && $_POST["department"] == "Intervention") print(" selected") ?>>Intervention</option>
-                        <option value="IT Support" <?php if (isset($_POST["department"]) && $_POST["department"] == "IT Support") print(" selected") ?>>IT Support</option>
-                        <option value="Law" <?php if (isset($_POST["department"]) && $_POST["department"] == "Law") print(" selected") ?>>Law</option>
-                        <option value="Library" <?php if (isset($_POST["department"]) && $_POST["department"] == "Library") print(" selected") ?>>Library</option>
-                        <option value="Maths" <?php if (isset($_POST["department"]) && $_POST["department"] == "Mathss") print(" selected") ?>>Maths</option>
-                        <option value="Media" <?php if (isset($_POST["department"]) && $_POST["department"] == "Media") print(" selected") ?>>Media</option>
-                        <option value="MFL" <?php if (isset($_POST["department"]) && $_POST["department"] == "MFL") print(" selected") ?>>MFL</option>
-
-                        <option value="Music" <?php if (isset($_POST["department"]) && $_POST["department"] == "Music") print(" selected") ?>>Music</option>
-
-                        <option value="Pastoral" <?php if (isset($_POST["department"]) && $_POST["department"] == "Pastoral") print(" selected") ?>>Pastoral</option>
-                        <option value="PE" <?php if (isset($_POST["department"]) && $_POST["department"] == "PE") print(" selected") ?>>PE</option>
-                        <option value="Psychology" <?php if (isset($_POST["department"]) && $_POST["department"] == "Psychology") print(" selected") ?>>Psychology</option>
-                        <option value="R2L" <?php if (isset($_POST["department"]) && $_POST["department"] == "R2L") print(" selected") ?>>R2L</option>
-
-                        <option value="Science" <?php if (isset($_POST["department"]) && $_POST["department"] == "Science") print(" selected") ?>>Science</option>
-                        <option value="Senior Leadership Team" <?php if (isset($_POST["department"]) && $_POST["department"] == "Senior Leadership Team") print(" selected") ?>>Senior Leadership Team</option>
-                        <option value="Site Team" <?php if (isset($_POST["department"]) && $_POST["department"] == "Site Team") print(" selected") ?>>Site Team</option>
-                        <option value="SLT" <?php if (isset($_POST["department"]) && $_POST["department"] == "SLT") print(" selected") ?>>SLT</option>
-                        <option value="Sociology" <?php if (isset($_POST["department"]) && $_POST["department"] == "Sociology") print(" selected") ?>>Sociology</option>
-                        <option value="Students" <?php if (isset($_POST["department"]) && $_POST["department"] == "Students") print(" selected") ?>>Students</option>
-                        <option value="Textiles" <?php if (isset($_POST["department"]) && $_POST["department"] == "Textiles") print(" selected") ?>>Textiles</option>
-                        <option value="Wellbeing" <?php if (isset($_POST["department"]) && $_POST["department"] == "Wellbeing") print(" selected") ?>>Wellbeing</option>
-                        <option value="Administration" <?php if (isset($_POST["department"]) && $_POST["department"] == "Administration") print(" selected") ?>>Administration</option>
-                        <option value="6th Form" <?php if (isset($_POST["department"]) && $_POST["department"] == "6th Form") print(" selected") ?>>Administration/6th Form</option>
-                        <option value="Admissions" <?php if (isset($_POST["department"]) && $_POST["department"] == "Admissions") print(" selected") ?>>Administration/Admissions</option>
-                        <option value="Parents Evening" <?php if (isset($_POST["department"]) && $_POST["department"] == "Parents Evening") print(" selected") ?>>Administration/Parents Evening</option>
-                        <option value="Preferences" <?php if (isset($_POST["department"]) && $_POST["department"] == "Preferences") print(" selected") ?>>Administration/Preferences</option>
-                        <option value="Principals Office" <?php if (isset($_POST["department"]) && $_POST["department"] == "Principals office") print(" selected") ?>>Administration/Principals Office</option>
-                        <option value="Prom" <?php if (isset($_POST["department"]) && $_POST["department"] == "Prom") print(" selected") ?>>Administration/Prom</option>
-                        <option value="Reception" <?php if (isset($_POST["department"]) && $_POST["department"] == "Reception") print(" selected") ?>>Administration/Reception</option>
-                        <option value="Transition" <?php if (isset($_POST["department"]) && $_POST["department"] == "Transition") print(" selected") ?>>Administration/Transition</option>
-                        <option value="Trips" <?php if (isset($_POST["department"]) && $_POST["department"] == "Trips") print(" selected") ?>>Administration/Trips</option>
-                        <option value="Work Experience" <?php if (isset($_POST["department"]) && $_POST["department"] == "Work Experience") print(" selected") ?>>Administration/Work Experience</option>
-                        <option value="Personalisation" <?php if (isset($_POST["department"]) && $_POST["department"] == "Personalisation") print(" selected") ?>>Personalisation</option>
-                        <option value="Planners/Report Cards" <?php if (isset($_POST["department"]) && $_POST["department"] == "Planners/Report Cards") print(" selected") ?>>Personalisation/Planners/Report Cards</option>
-                        <option value="Summer 2019 Ready" <?php if (isset($_POST["department"]) && $_POST["department"] == "Summer 2019 Ready") print(" selected") ?>>Personalisation/Summer 2019 Ready</option>
-                        <option value="PSHE/Citezenship" <?php if (isset($_POST["department"]) && $_POST["department"] == "PSHE/Citezenship") print(" selected") ?>>PSHE/Citezenship</option>
-
-
-
+                        <?php
+                        foreach ($DEPARTMENT_CONFIG as $key => $value) {
+                            if (isset($_POST["department"]) && $_POST["department"] == $value) {
+                                echo "<option value='$key' selected>$value</key>";
+                            } else {
+                                echo "<option value='$key'>$value</key>";
+                            }
+                        }
+                        ?>
                     </select>
                     <?php if (isset($_SESSION['errors']['departmentError'])) echo ' <span class="errorText">' . $_SESSION['errors']['departmentError'] . '</span>'; ?>
 
@@ -153,13 +99,15 @@ unset($_SESSION["ULanding"]); //clear session variable
                     <label for="period" class="control-label">Period Required:</label>
                     <select name="period" class="form-control">
                         <option value="">--Please select--</option>
-                        <option value="Period1" <?php if (isset($_POST["period"]) && $_POST["period"] == "Period1") print(" selected") ?>>Period1</option>
-                        <option value="Period2" <?php if (isset($_POST["period"]) && $_POST["period"] == "Period2") print(" selected") ?>>Period2</option>
-                        <option value="Break" <?php if (isset($_POST["period"]) && $_POST["period"] == "Break") print(" selected") ?>>Break</option>
-                        <option value="Period3" <?php if (isset($_POST["period"]) && $_POST["period"] == "Period3") print(" selected") ?>>Period3</option>
-                        <option value="Period4" <?php if (isset($_POST["period"]) && $_POST["period"] == "Period4") print(" selected") ?>>Period4</option>
-                        <option value="Period5" <?php if (isset($_POST["period"]) && $_POST["period"] == "Period5") print(" selected") ?>>Period5</option>
-                        <option value="Period6" <?php if (isset($_POST["period"]) && $_POST["period"] == "Period6") print(" selected") ?>>Period6</option>
+                        <?php
+                        foreach ($PERIOD_CONFIG as $key => $value) {
+                            if (isset($_POST["period"]) && $_POST["period"] == $value) {
+                                echo "<option value='$key' selected>$value</key>";
+                            } else {
+                                echo "<option value='$key'>$value</key>";
+                            }
+                        }
+                        ?>
                     </select>
                     <?php if (isset($_SESSION['errors']['periodError'])) echo ' <span class="errorText">' . $_SESSION['errors']['periodError'] . '</span>'; ?>
                 </div>
@@ -190,150 +138,60 @@ unset($_SESSION["ULanding"]); //clear session variable
                             <p class="card-title">Standard prints will be double sided and black & white, If you need anything different from this please enter the specific details below.</p>
                         </div>
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Colour</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="Colour">
-                                    </div>
-                                </div>
-                            </li>
 
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">2 to a page</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="2toapage">
-                                    </div>
-                                </div>
+                            <?php
+                            foreach ($PRINT_TYPE_CONFIG as $key => $value) {
 
-                            </li>
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Size-A3</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="A3">
-                                    </div>
-                                </div>
-
-                            </li>
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Size-A4</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="A4">
-                                    </div>
-                                </div>
-
-                            </li>
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Size-A5</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="A5">
-                                    </div>
-                                </div>
-
-                            </li>
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Stapled-Top Left</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="StapledTopLeft">
-                                    </div>
-                                </div>
-
-                            </li>
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Stapled-Left Edge</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="StapledLeftEdge">
-                                    </div>
-                                </div>
-
-                            </li>
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Hole Punched-Left x 4</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="HolePunchedLeft4">
-                                    </div>
-                                </div>
-
-                            </li>
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Hole Punched-Left x 2</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="HolePunchedLeft2">
-                                    </div>
-                                </div>
-
-                            </li>
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Booklet-A4</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="BookletA4">
-                                    </div>
-                                </div>
-
-                            </li>
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Booklet-A5</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="BookletA5">
-                                    </div>
-                                </div>
-
-                            </li>
-                            <li class="list-group-item py-0">
-                                <div class="required row">
-                                    <div class="col">
-                                        <label class="checkbox">Laminated</label>
-                                    </div>
-                                    <div class="col">
-                                        <input type="checkbox" name="check_list[]" value="Laminated">
-                                    </div>
-                                </div>
-
-                            </li>
+                                if (!empty($_POST['check_list'])) {
+                                    if (in_array($value, $_POST['check_list']) === true){
+                                            echo
+                                                "<li class='list-group-item py-0'>
+                                                <div class='required row'>
+                                                    <div class='col'>
+                                                    <label class='checkbox'>$value</label>
+                                                    </div>
+                                                    <div class='col'>
+                                                    <input type='checkbox' name='check_list[]' checked value=$value>
+                                                    </div>
+                                                </div>
+                                            </li>";
+                                        } else {
+                                            echo
+                                                "<li class='list-group-item py-0'>
+                                        <div class='required row'>
+                                            <div class='col'>
+                                            <label class='checkbox'>$value</label>
+                                            </div>
+                                            <div class='col'>
+                                            <input type='checkbox' name='check_list[]' value=$value>
+                                            </div>
+                                        </div>
+                                    </li>";
+                                        }
+                                    
+                                } else {
+                                    echo
+                                        "<li class='list-group-item py-0'>
+                                        <div class='required row'>
+                                            <div class='col'>
+                                            <label class='checkbox'>$value</label>
+                                            </div>
+                                            <div class='col'>
+                                            <input type='checkbox' name='check_list[]' value=$value>
+                                            </div>
+                                        </div>
+                                    </li>";
+                                }
+                            }
+                            ?>
                         </ul>
                     </div>
-
-
-
                 </div>
 
                 <div class="form-group required w-50" id="specialRequirementContainer">
 
                     <label for="specialRequirement" class="control-label-optional">Special Requirements:</label>
                     <textarea class="form-control" rows="5" id="specialRequirement" name="specialRequirement"></textarea>
-
                     <strong><span class="help-block">Please list other requirements not listed already, such
                             as
                             colored paper/card, laminated, binding
@@ -343,10 +201,8 @@ unset($_SESSION["ULanding"]); //clear session variable
                 </div>
 
                 <div class="form-group required w-50" id="url">
-
                     <label for="url" class="control-label-optional">URL for print copies:</label>
                     <textarea class="form-control form-control-sm" rows="2" id="url" name="url"></textarea>
-
                 </div>
 
                 <div class="form-group required w-50">
@@ -356,8 +212,6 @@ unset($_SESSION["ULanding"]); //clear session variable
                         <?php if (isset($_SESSION['errors']['uploadDocumentError'])) echo ' <span class="errorText">' . $_SESSION['errors']['uploadDocumentError'] . '</span>'; ?>
                     </div>
                 </div>
-
-
                 <div class="form-group w-25">
                     <input type="submit" id="submit" name="submit" class="btn btn-primary btn-block" value="Submit">
                 </div>
