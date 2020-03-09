@@ -143,9 +143,9 @@ unset($_SESSION["ULanding"]); //clear session variable
                             foreach ($PRINT_TYPE_CONFIG as $key => $value) {
 
                                 if (!empty($_POST['check_list'])) {
-                                    if (in_array($value, $_POST['check_list']) === true){
-                                            echo
-                                                "<li class='list-group-item py-0'>
+                                    if (in_array($value, $_POST['check_list']) === true) {
+                                        echo
+                                            "<li class='list-group-item py-0'>
                                                 <div class='required row'>
                                                     <div class='col'>
                                                     <label class='checkbox'>$value</label>
@@ -155,9 +155,9 @@ unset($_SESSION["ULanding"]); //clear session variable
                                                     </div>
                                                 </div>
                                             </li>";
-                                        } else {
-                                            echo
-                                                "<li class='list-group-item py-0'>
+                                    } else {
+                                        echo
+                                            "<li class='list-group-item py-0'>
                                         <div class='required row'>
                                             <div class='col'>
                                             <label class='checkbox'>$value</label>
@@ -167,8 +167,7 @@ unset($_SESSION["ULanding"]); //clear session variable
                                             </div>
                                         </div>
                                     </li>";
-                                        }
-                                    
+                                    }
                                 } else {
                                     echo
                                         "<li class='list-group-item py-0'>
@@ -191,7 +190,13 @@ unset($_SESSION["ULanding"]); //clear session variable
                 <div class="form-group required w-50" id="specialRequirementContainer">
 
                     <label for="specialRequirement" class="control-label-optional">Special Requirements:</label>
-                    <textarea class="form-control" rows="5" id="specialRequirement" name="specialRequirement"></textarea>
+                    <?php
+                    if (isset($_POST["specialRequirement"])) {
+                        echo "<textarea class='form-control' rows='5' id='specialRequirement'  name='specialRequirement'  >" . $_POST['specialRequirement'] . "</textarea>";
+                    } else {
+                        echo "<textarea class='form-control' rows='5' id='specialRequirement'  name='specialRequirement'></textarea>";
+                    }
+                    ?>
                     <strong><span class="help-block">Please list other requirements not listed already, such
                             as
                             colored paper/card, laminated, binding
