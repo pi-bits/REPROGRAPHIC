@@ -188,14 +188,12 @@ function hasErrors(&$filesToEmail,$PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIO
    }
    
    if (!isset($_POST['check_list[]'])) {
-      foreach ( (array)isset($_POST['check_list[]']) as $value){
+      foreach ( $_POST['check_list[]'] as $value){
          if(!in_array($value, $PRINT_TYPE_CONFIG)){
             $errors['printConfiguration'] = "Invalid Selection for Print Types.";
          break;
          }
       }
-
-      
    }
    if (empty($_POST['period']) && !in_array($_POST['period'], $PERIOD_CONFIG)) {
       $errors['periodError'] = "Period is required.";
