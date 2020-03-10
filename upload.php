@@ -191,7 +191,7 @@ function hasErrors(&$filesToEmail,$PRINT_TYPE_CONFIG, $DEPARTMENT_CONFIG, $PERIO
       foreach ( (array)isset($_POST['check_list[]']) as $value){
          if(!in_array($value, $PRINT_TYPE_CONFIG)){
             $errors['printConfiguration'] = "Invalid Selection for Print Types.";
-            return;
+         break;
          }
       }
 
